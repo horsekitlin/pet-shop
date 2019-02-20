@@ -26,10 +26,11 @@ pipeline:
       - . /root/.nvm/nvm.sh && nvm use 10.9.0
       - mkdir -p /var/www/html/home.tomas.website
       - cd /root/drone/src/github.com/horsekitlin/pet-shop
-      - yarn install
-      - yarn build
-      - cp -a build/* /var/www/html/home.tomas.website
+      - cp -a ./* /var/www/html/home.tomas.website
       - cd /root
       - rm -rf /root/drone
+      - cd /var/www/html/home.tomas.website
+      - yarn install
+      - yarn dev
     when:
       branch: master
