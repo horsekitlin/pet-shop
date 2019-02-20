@@ -1,0 +1,35 @@
+pipeline:
+  scp:
+    image: appleboy/drone-scp
+    pull: true
+    host: 
+      - 139.162.9.68
+    port: 22
+    username: root
+    user: root
+    secrets: [ ssh_password ]
+    target: /root
+    source:
+      - /drone/src/github.com/horsekitlin/pet-shop
+    when:
+      branch: master
+
+  ssh:
+    image: appleboy/drone-ssh
+    host: 
+      - 139.162.9.68
+    username: root
+    user: root
+    secrets: [ ssh_password ]
+    command_timeout: 600
+    script:
+      - . /root/.nvm/nvm.sh && nvm use 10.9.0
+      - mkdir -p /var/www/html/home.tomas.website
+      - cd /root/drone/src/github.com/horsekitlin/pet-shop
+      - yarn install
+      - yarn build
+      - cp -a build/* /var/www/html/home.tomas.website
+      - cd /root
+      - rm -rf /root/drone
+    when:
+      branch: master
